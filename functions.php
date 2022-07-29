@@ -45,3 +45,28 @@ function display_list()
 
     return $lists;
 }
+
+
+function search_list($keyword_param)
+{
+    $dbh = connect_db();
+
+    $sql = <<<EOM
+    SELECT
+        *
+    FROM
+        animals
+    WHERE
+        description LIKE :keyword
+    EOM;
+
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindValue(':keyword', $keyword_param, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    $lists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $lists;
+}
